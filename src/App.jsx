@@ -6,18 +6,20 @@ import { easing } from 'maath'
 
 export default function App() {
   return (
+
     <Canvas camera={{ position: [0, 0, 20], fov: 15 }}>
       <ScrollControls damping={0.2} pages={3} distance={0.5}>
         <Lens>
+
+          <Torus />
+
           <Scroll>
             <Typography />
             <Images />
+           
+
           </Scroll>
           <Scroll html>
-            {/* <div> style={{ transform: 'translate3d(50vw, 60vh, 0)' }}
-              Seite 1
-            </div> */}
-            
 
             <div style={{ transform: 'translate3d(65vw, 192vh, 0)' }}>
               Ich mache 
@@ -40,8 +42,8 @@ export default function App() {
 
 function Lens({ children, damping = 0.15, ...props }) {
   const ref = useRef()
-  const { nodes } = useGLTF('/lens-transformed.glb')
-  const roughnessMap = useTexture('/Textures/waternormals.jpeg')
+  // const { nodes } = useGLTF('/lens-transformed.glb')
+  const roughnessMap = useTexture('./Textures/waternormals.jpeg')
   const buffer = useFBO()
   const viewport = useThree((state) => state.viewport)
   const [scene] = useState(() => new THREE.Scene())
@@ -114,13 +116,13 @@ function Images() {
   })
   return (
     <group ref={group}>
-      <Image position={[-2, 0, 0]} scale={[4, height, 1]} url="/img/Colorcube_octane_15.png" />
-      <Image position={[2, 0, 3]} scale={3} url="img/crystal_9.png" />
-      <Image position={[-2.05, -height, 6]} scale={[1, 3, 1]} url="/img/dispersion_octane_08.png" />
-      <Image position={[-0.6, -height, 9]} scale={[1, 2, 1]} url="/img/more_money_02.png" />
-      <Image position={[0.75, -height, 10.5]} scale={1.5} url="/img/nohdri0114.png" />
-      <Image position={[0, -height * 1.5, 7.5]} scale={[1.5, 3, 1]} url="/img/ocean_iridescent_05.png" />
-      <Image position={[0, -height * 2 - height / 4, 0]} scale={[width / 2, height / 1.1, 1]} url="/img/ocean_iridescent_27.png" />
+      <Image position={[-2, 0, 0]} scale={[4, height, 1]} url="./img/Colorcube_octane_15.png" />
+      <Image position={[2, 0, 3]} scale={3} url="./img/crystal_9.png" />
+      <Image position={[-2.05, -height, 6]} scale={[1, 3, 1]} url="./img/dispersion_octane_08.png" />
+      <Image position={[-0.6, -height, 9]} scale={[1, 2, 1]} url="./img/more_money_02.png" />
+      <Image position={[0.75, -height, 10.5]} scale={1.5} url="./img/nohdri0114.png" />
+      <Image position={[0, -height * 1.5, 7.5]} scale={[1.5, 3, 1]} url="./img/ocean_iridescent_05.png" />
+      <Image position={[0, -height * 2 - height / 4, 0]} scale={[width / 2, height / 1.1, 1]} url="./img/ocean_iridescent_27.png" />
     </group>
   )
 }
@@ -135,5 +137,35 @@ function Typography() {
       <Text children="Hohenbild" anchorX="right" position={[width / 2.5, -height * 2, 12]} {...shared} />
       <Text children="Portfolio" position={[0, -height * 4.624, 12]} {...shared} />
     </>
+  )
+}
+
+function Torus(){
+
+  const torusRef = useRef()
+  useFrame((state, delta) => {
+    torusRef.current.rotation.x = torusRef.current.rotation.y += delta / 3
+  })
+  return(
+    <mesh
+    ref={torusRef}
+    scale={0.2}
+    position={[-2.0, 0.5, 0]}
+    >
+        <torusGeometry
+        args={[10, 1.2, 16, 100, 2*Math.PI]}
+        />
+        <MeshTransmissionMaterial 
+        buffer={ false } 
+    ior={1.2} 
+    thickness={1.0} 
+    anisotropy={0.3} 
+    chromaticAberration={0.04} 
+    roughness = {0.4}
+    backside = {true}
+    backsideThickness = { 0.1 }
+    transmission = {1}
+    />
+</mesh>
   )
 }
