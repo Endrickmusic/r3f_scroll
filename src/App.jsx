@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { useRef, useState } from 'react'
 import { Canvas, createPortal, useFrame, useThree } from '@react-three/fiber'
-import { useFBO, useGLTF, useScroll, Text, Image, Scroll, Preload, ScrollControls, MeshTransmissionMaterial } from '@react-three/drei'
+import { useFBO, useGLTF, useScroll, Text, Image, Scroll, Preload, ScrollControls, MeshTransmissionMaterial, useTexture } from '@react-three/drei'
 import { easing } from 'maath'
 
 export default function App() {
@@ -14,12 +14,17 @@ export default function App() {
             <Images />
           </Scroll>
           <Scroll html>
+            {/* <div> style={{ transform: 'translate3d(50vw, 60vh, 0)' }}
+              Seite 1
+            </div> */}
+            
+
             <div style={{ transform: 'translate3d(65vw, 192vh, 0)' }}>
-              PMNDRS Pendant lamp
+              Ich mache 
               <br />
-              bronze, 38 cm
+              alles für
               <br />
-              CHF 59.95
+              ihr Geld.
               <br />
             </div>
           </Scroll>
@@ -36,6 +41,7 @@ export default function App() {
 function Lens({ children, damping = 0.15, ...props }) {
   const ref = useRef()
   const { nodes } = useGLTF('/lens-transformed.glb')
+  const roughnessMap = useTexture('/Textures/waternormals.jpeg')
   const buffer = useFBO()
   const viewport = useThree((state) => state.viewport)
   const [scene] = useState(() => new THREE.Scene())
@@ -59,6 +65,10 @@ function Lens({ children, damping = 0.15, ...props }) {
     state.gl.setClearColor('#d8d7d7')
     state.gl.render(scene, state.camera)
     state.gl.setRenderTarget(null)
+
+    // Rotation of the cube
+    ref.current.rotation.x = ref.current.rotation.y += delta / 3
+
   })
   return (
     <>
@@ -67,8 +77,23 @@ function Lens({ children, damping = 0.15, ...props }) {
         <planeGeometry />
         <meshBasicMaterial map={buffer.texture} />
       </mesh>
-      <mesh scale={0.25} ref={ref} rotation-x={Math.PI / 2} geometry={nodes.Cylinder.geometry} {...props}>
-        <MeshTransmissionMaterial buffer={buffer.texture} ior={1.2} thickness={1.5} anisotropy={0.1} chromaticAberration={0.04} />
+      <mesh scale={0.35} ref={ref} 
+      rotation={[Math.PI / 3, Math.PI / 3, Math.PI / 3]} 
+      // geometry={nodes.Cylinder.geometry} 
+      {...props}>
+        <boxGeometry />
+        <MeshTransmissionMaterial 
+          // buffer={buffer.texture} 
+          buffer={ false } 
+          ior={1.2} 
+          thickness={1.5} 
+          anisotropy={0.1} 
+          chromaticAberration={0.04} 
+          roughness = {0.2}
+          backside = {true}
+          backsideThickness = { 0.1 }
+          transmission = {1}
+          />
       </mesh>
     </>
   )
@@ -89,26 +114,26 @@ function Images() {
   })
   return (
     <group ref={group}>
-      <Image position={[-2, 0, 0]} scale={[4, height, 1]} url="/img1.jpg" />
-      <Image position={[2, 0, 3]} scale={3} url="/img6.jpg" />
-      <Image position={[-2.05, -height, 6]} scale={[1, 3, 1]} url="/trip2.jpg" />
-      <Image position={[-0.6, -height, 9]} scale={[1, 2, 1]} url="/img8.jpg" />
-      <Image position={[0.75, -height, 10.5]} scale={1.5} url="/trip4.jpg" />
-      <Image position={[0, -height * 1.5, 7.5]} scale={[1.5, 3, 1]} url="/img3.jpg" />
-      <Image position={[0, -height * 2 - height / 4, 0]} scale={[width, height / 1.1, 1]} url="/img7.jpg" />
+      <Image position={[-2, 0, 0]} scale={[4, height, 1]} url="/img/Colorcube_octane_15.png" />
+      <Image position={[2, 0, 3]} scale={3} url="img/crystal_9.png" />
+      <Image position={[-2.05, -height, 6]} scale={[1, 3, 1]} url="/img/dispersion_octane_08.png" />
+      <Image position={[-0.6, -height, 9]} scale={[1, 2, 1]} url="/img/more_money_02.png" />
+      <Image position={[0.75, -height, 10.5]} scale={1.5} url="/img/nohdri0114.png" />
+      <Image position={[0, -height * 1.5, 7.5]} scale={[1.5, 3, 1]} url="/img/ocean_iridescent_05.png" />
+      <Image position={[0, -height * 2 - height / 4, 0]} scale={[width / 2, height / 1.1, 1]} url="/img/ocean_iridescent_27.png" />
     </group>
   )
 }
 
 function Typography() {
   const state = useThree()
-  const { width, height } = state.viewport.getCurrentViewport(state.cameta, [0, 0, 12])
-  const shared = { font: '/Inter-Regular.woff', letterSpacing: -0.1, color: 'black' }
+  const { width, height } = state.viewport.getCurrentViewport(state.camera, [0, 0, 12])
+  const shared = { font: '/Inter-Regular.woff', letterSpacing: -0.07, color: 'black' }
   return (
     <>
-      <Text children="to" anchorX="left" position={[-width / 2.5, -height / 10, 12]} {...shared} />
-      <Text children="be" anchorX="right" position={[width / 2.5, -height * 2, 12]} {...shared} />
-      <Text children="home" position={[0, -height * 4.624, 12]} {...shared} />
+      <Text children="Christian" anchorX="left" position={[-width / 2.5, -height / 10, 12]} {...shared} />
+      <Text children="Hohenbild" anchorX="right" position={[width / 2.5, -height * 2, 12]} {...shared} />
+      <Text children="Portfolio" position={[0, -height * 4.624, 12]} {...shared} />
     </>
   )
 }
