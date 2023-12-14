@@ -1,7 +1,12 @@
 import * as THREE from 'three'
 import { useRef, useState } from 'react'
 import { Canvas, createPortal, useFrame, useThree } from '@react-three/fiber'
-import { useFBO, useGLTF, useScroll, Text, Image, Scroll, Preload, ScrollControls, MeshTransmissionMaterial, useTexture } from '@react-three/drei'
+import { useFBO, 
+         useGLTF, 
+         useScroll, Text, Image, Scroll, Preload, ScrollControls, MeshTransmissionMaterial, 
+         useTexture,
+         useEnvironment
+ } from '@react-three/drei'
 import { easing } from 'maath'
 
 export default function App() {
@@ -11,7 +16,8 @@ export default function App() {
       <ScrollControls damping={0.2} pages={3} distance={0.5}>
         <Lens>
 
-          <Torus />
+          <TransTorus />
+          <GoldTorus />
 
           <Scroll>
             <Typography />
@@ -140,7 +146,7 @@ function Typography() {
   )
 }
 
-function Torus(){
+function TransTorus(){
 
   const torusRef = useRef()
   useFrame((state, delta) => {
@@ -150,10 +156,10 @@ function Torus(){
     <mesh
     ref={torusRef}
     scale={0.2}
-    position={[-2.0, 0.5, 0]}
+    position={[-2.0, 0.5, 3]}
     >
         <torusGeometry
-        args={[10, 1.2, 16, 100, 2*Math.PI]}
+        args={[1.6, 0.4, 16, 100, 2*Math.PI]}
         />
         <MeshTransmissionMaterial 
         buffer={ false } 
@@ -161,10 +167,42 @@ function Torus(){
     thickness={1.0} 
     anisotropy={0.3} 
     chromaticAberration={0.04} 
-    roughness = {0.4}
+    roughness = {0.6}
     backside = {true}
     backsideThickness = { 0.1 }
     transmission = {1}
+    />
+</mesh>
+  )
+}
+
+function GoldTorus(){
+
+  const goldRef = useRef()
+
+  const envMap = useEnvironment({ files: './Environments/envmap.hdr' })
+  const normalMap = useTexture("./Textures/waternormals.jpeg")
+
+  useFrame((state, delta) => {
+    goldRef.current.rotation.x += delta / 3
+    goldRef.current.rotation.y += delta / 1.9
+  })
+  return(
+    <mesh
+    ref={goldRef}
+    scale={0.2}
+    position={[3.0, -0.5, 4]}
+    >
+        <torusGeometry
+        args={[1.6, 0.4, 16, 100, 2*Math.PI]}
+        />
+        <meshStandardMaterial 
+    roughness = {0.05}
+    metalness = {1}
+    envMap={envMap}
+    normalMap={normalMap}
+    color={"gold"}
+    
     />
 </mesh>
   )
