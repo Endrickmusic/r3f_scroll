@@ -18,11 +18,12 @@ export default function App() {
 
           <TransTorus />
           <GoldTorus />
+          
 
           <Scroll>
             <Typography />
             <Images />
-           
+            <SilverTorus />
 
           </Scroll>
           <Scroll html>
@@ -35,6 +36,8 @@ export default function App() {
               ihr Geld.
               <br />
             </div>
+            
+            {/* <TransTorus /> */}
           </Scroll>
           {/** This is a helper that pre-emptively makes threejs aware of all geometries, textures etc
                By default threejs will only process objects if they are "seen" by the camera leading 
@@ -194,7 +197,7 @@ function GoldTorus(){
     position={[3.0, -0.5, 4]}
     >
         <torusGeometry
-        args={[1.6, 0.4, 16, 100, 2*Math.PI]}
+        args={[1.9, 0.6, 16, 100, 2*Math.PI]}
         />
         <meshStandardMaterial 
     roughness = {0.05}
@@ -202,6 +205,38 @@ function GoldTorus(){
     envMap={envMap}
     normalMap={normalMap}
     color={"gold"}
+    
+    />
+</mesh>
+  )
+}
+
+function SilverTorus(){
+
+  const silverRef = useRef()
+
+  const envMap = useEnvironment({ files: './Environments/envmap.hdr' })
+  const normalMap = useTexture("./Textures/waternormals.jpeg")
+
+  useFrame((state, delta) => {
+    silverRef.current.rotation.x += delta / 3
+    silverRef.current.rotation.y += delta / 1.9
+  })
+  return(
+    <mesh
+    ref={silverRef}
+    scale={0.2}
+    position={[0.0, -10.0, 4]}
+    >
+        <torusGeometry
+        args={[2.1, 0.4, 16, 100, 2*Math.PI]}
+        />
+        <meshStandardMaterial 
+    roughness = {0.05}
+    metalness = {1}
+    envMap={envMap}
+    normalMap={normalMap}
+    color={"white"}
     
     />
 </mesh>
