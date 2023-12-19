@@ -8,6 +8,7 @@ import { useFBO,
          useEnvironment
  } from '@react-three/drei'
 import { easing } from 'maath'
+import MovingPlane from './MovingPlane.jsx'
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
             <Typography />
             <Images />
             <SilverTorus />
+            <MovingPlane />
 
           </Scroll>
           <Scroll html>
@@ -219,7 +221,7 @@ function SilverTorus(){
   const normalMap = useTexture("./Textures/waternormals.jpeg")
 
   useFrame((state, delta) => {
-    silverRef.current.rotation.x += delta / 3
+    silverRef.current.rotation.x -= delta / 5
     silverRef.current.rotation.y += delta / 1.9
   })
   return(
