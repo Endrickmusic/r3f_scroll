@@ -9,6 +9,7 @@ import { useFBO,
  } from '@react-three/drei'
 import { easing } from 'maath'
 import MovingPlane from './MovingPlane.jsx'
+import Model from './Model.jsx'
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
             <Images />
             <SilverTorus />
             <MovingPlane />
+            <Model />
 
           </Scroll>
           <Scroll html>
