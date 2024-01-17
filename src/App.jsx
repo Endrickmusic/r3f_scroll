@@ -18,7 +18,7 @@ export default function App() {
 
   const config = useControls('Text', {
     text: '  Christian Hohenbild  ',
-    color: '#ffdc00',
+    color: '#deaad9',
     fontSize: { value: 1, min: 0.1, max: 2 },
     fontDepth: { value: 0.03, min: 0.01, max: 3.5 },
     uRadius: { value: 2.1, min: 0.1, max: 3 },
@@ -26,7 +26,7 @@ export default function App() {
     rotation: { value: 2.1, min: 0, max: 2*Math.PI, step: 0.05 },
     uRotateSpeed: { value: 1.2, min: 0, max: 3, step: 0.01 },
     roughness: { value: 0.05, min: 0.0, max: 1.0, step: 0.01 },
-    normalScale: { value: 0.05, min: 0.0, max: 1.0, step: 0.01 },
+    normalScale: { value: 0.15, min: 0.0, max: 1.0, step: 0.01 },
     lightIntensity: { value: 25.0, min: 0.0, max: 100.0, step: 1.0 },
     
   })
