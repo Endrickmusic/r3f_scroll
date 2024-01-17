@@ -8,22 +8,44 @@ import { useFBO,
          useEnvironment
  } from '@react-three/drei'
 import { easing } from 'maath'
+import { useControls, Leva } from 'leva'
 import MovingPlane from './MovingPlane.jsx'
 import Model from './Model.jsx'
+import TwistedText from './TwistedText.jsx'
+
 
 export default function App() {
-  return (
 
+  const config = useControls('Text', {
+    text: '  Christian Hohenbild  ',
+    color: '#ffdc00',
+    fontSize: { value: 1, min: 0.1, max: 2 },
+    fontDepth: { value: 0.03, min: 0.01, max: 3.5 },
+    uRadius: { value: 2.1, min: 0.1, max: 3 },
+    uTwists: { value: 1, min: 0, max: 3, step: 0.01 },
+    rotation: { value: 2.1, min: 0, max: 2*Math.PI, step: 0.05 },
+    uRotateSpeed: { value: 1.2, min: 0, max: 3, step: 0.01 },
+    roughness: { value: 0.05, min: 0.0, max: 1.0, step: 0.01 },
+    normalScale: { value: 0.05, min: 0.0, max: 1.0, step: 0.01 },
+    lightIntensity: { value: 25.0, min: 0.0, max: 100.0, step: 1.0 },
+    
+  })
+
+
+  return (
+    <>
+    <Leva collapsed />
     <Canvas camera={{ position: [0, 0, 20], fov: 15 }}>
       <ScrollControls damping={0.2} pages={3} distance={0.5}>
         <Lens>
 
           <TransTorus />
           <GoldTorus />
-          
+          <TwistedText config={config}/>
 
           <Scroll>
-            <Typography />
+            
+            {/* <Typography /> */}
             <Images />
             <SilverTorus />
             <MovingPlane />
@@ -50,6 +72,7 @@ export default function App() {
         </Lens>
       </ScrollControls>
     </Canvas>
+    </>
   )
 }
 
