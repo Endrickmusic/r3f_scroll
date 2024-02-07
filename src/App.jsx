@@ -9,7 +9,6 @@ import { useFBO,
  } from '@react-three/drei'
 import { easing } from 'maath'
 import { useControls, Leva } from 'leva'
-import MovingPlane from './MovingPlane.jsx'
 import Model from './Model.jsx'
 import TwistedText from './TwistedText.jsx'
 
@@ -28,7 +27,7 @@ export default function App() {
     roughness: { value: 0.05, min: 0.0, max: 1.0, step: 0.01 },
     normalScale: { value: 0.15, min: 0.0, max: 1.0, step: 0.01 },
     lightIntensity: { value: 25.0, min: 0.0, max: 100.0, step: 1.0 },
-    
+    scale: { value: 1.2, min: 0.0, max: 10.0, step: 0.2 },
   })
 
 
@@ -48,8 +47,10 @@ export default function App() {
             {/* <Typography /> */}
             <Images />
             <SilverTorus />
-            <MovingPlane />
-            <Model />
+            {/* <MovingPlane /> */}
+            <Model 
+              receiveShadow
+            />
 
           </Scroll>
           <Scroll html>
@@ -79,7 +80,7 @@ export default function App() {
 function Lens({ children, damping = 0.15, ...props }) {
   const ref = useRef()
   // const { nodes } = useGLTF('/lens-transformed.glb')
-  const roughnessMap = useTexture('./Textures/waternormals.jpeg')
+  const roughnessMap = useTexture('./textures/waternormals.jpeg')
   const buffer = useFBO()
   const viewport = useThree((state) => state.viewport)
   const [scene] = useState(() => new THREE.Scene())
@@ -142,23 +143,23 @@ function Images() {
   const data = useScroll()
   const { width, height } = useThree((state) => state.viewport)
   useFrame(() => {
-    group.current.children[0].material.zoom = 1 + data.range(0, 1 / 3) / 3
-    group.current.children[1].material.zoom = 1 + data.range(0, 1 / 3) / 3
-    group.current.children[2].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2
-    group.current.children[3].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2
-    group.current.children[4].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2
-    group.current.children[5].material.grayscale = 1 - data.range(1.6 / 3, 1 / 3)
-    group.current.children[6].material.zoom = 1 + (1 - data.range(2 / 3, 1 / 3)) / 3
+    // group.current.children[0].material.zoom = 1 + data.range(0, 1 / 3) / 3
+    // group.current.children[1].material.zoom = 1 + data.range(0, 1 / 3) / 3
+    // group.current.children[2].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2
+    // group.current.children[3].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2
+    // group.current.children[4].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2
+    // group.current.children[5].material.grayscale = 1 - data.range(1.6 / 3, 1 / 3)
+    // group.current.children[6].material.zoom = 1 + (1 - data.range(2 / 3, 1 / 3)) / 3
   })
   return (
     <group ref={group}>
-      <Image position={[-2, 0, 0]} scale={[4, height, 1]} url="./img/Colorcube_octane_15.png" />
-      <Image position={[2, 0, 3]} scale={3} url="./img/crystal_9.png" />
-      <Image position={[-2.05, -height, 6]} scale={[1, 3, 1]} url="./img/dispersion_octane_08.png" />
-      <Image position={[-0.6, -height, 9]} scale={[1, 2, 1]} url="./img/more_money_02.png" />
-      <Image position={[0.75, -height, 10.5]} scale={1.5} url="./img/nohdri0114.png" />
-      <Image position={[0, -height * 1.5, 7.5]} scale={[1.5, 3, 1]} url="./img/ocean_iridescent_05.png" />
-      <Image position={[0, -height * 2 - height / 4, 0]} scale={[width / 2, height / 1.1, 1]} url="./img/ocean_iridescent_27.png" />
+      {/* <Image position={[-2, 0, 0]} scale={[4, height, 1]} url="./img/Colorcube_octane_15.png" /> */}
+      {/* <Image position={[2, 0, 3]} scale={3} url="./img/crystal_9.png" /> */}
+      {/* <Image position={[-2.05, -height, 6]} scale={[1, 3, 1]} url="./img/dispersion_octane_08.png" /> */}
+      {/* <Image position={[-0.6, -height, 9]} scale={[1, 2, 1]} url="./img/more_money_02.png" /> */}
+      {/* <Image position={[0.75, -height, 10.5]} scale={1.5} url="./img/nohdri0114.png" /> */}
+      {/* <Image position={[0, -height * 1.5, 7.5]} scale={[1.5, 3, 1]} url="./img/ocean_iridescent_05.png" /> */}
+      {/* <Image position={[0, -height * 2 - height / 4, 0]} scale={[width / 2, height / 1.1, 1]} url="./img/ocean_iridescent_27.png" /> */}
     </group>
   )
 }
@@ -211,7 +212,7 @@ function GoldTorus(){
   const goldRef = useRef()
 
   const envMap = useEnvironment({ files: './Environments/envmap.hdr' })
-  const normalMap = useTexture("./Textures/waternormals.jpeg")
+  const normalMap = useTexture("./textures/waternormals.jpeg")
 
   useFrame((state, delta) => {
     goldRef.current.rotation.x += delta / 3
@@ -243,7 +244,7 @@ function SilverTorus(){
   const silverRef = useRef()
 
   const envMap = useEnvironment({ files: './Environments/envmap.hdr' })
-  const normalMap = useTexture("./Textures/waternormals.jpeg")
+  const normalMap = useTexture("./textures/waternormals.jpeg")
 
   useFrame((state, delta) => {
     silverRef.current.rotation.x -= delta / 5

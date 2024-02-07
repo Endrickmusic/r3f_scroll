@@ -4,8 +4,8 @@ import { useMemo, useRef } from "react";
 import { Color, DoubleSide } from "three";
 // import { shaderMaterial } from '@react-three/drei'
 
-import vertexShader from './shader/vertexShader'
-import fragmentShader from './shader/fragmentShader'
+import vertexShader from './shader/MovingPlane/vertexShader'
+import fragmentShader from './shader/MovingPlane/fragmentShader'
 
 export default function MovingPlane(){
 

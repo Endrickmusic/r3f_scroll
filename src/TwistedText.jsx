@@ -180,7 +180,7 @@ export default function MyText({ config }) {
 
   }
 
-  const normalM = useLoader(TextureLoader, "./Textures/waternormals.jpeg")
+  const normalM = useLoader(TextureLoader, "./textures/waternormals.jpeg")
     normalM.wrapS = RepeatWrapping; // repeat in the U direction
     normalM.wrapT = RepeatWrapping; // repeat in the V direction
     normalM.repeat.set(1.5, 1.5); // adjust the values as needed
@@ -198,6 +198,7 @@ export default function MyText({ config }) {
       <mesh 
         ref={refMesh} 
         castShadow
+        scale={config.scale}
       >
         <bufferGeometry attach="geometry" geometry={geo} />
         <meshStandardMaterial 
